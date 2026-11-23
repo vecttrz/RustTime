@@ -18,7 +18,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Two-column horizontal, centered interface with dynamic height and a non-maximizable window.
 - Automatic language detection: Spanish when Windows is set to Spanish, English otherwise.
 - Application icon embedded in the executable and the window.
-- Development credits: vecttrz · 2026.
+- Credits: vecttrz · 2026.
 - Release artifacts: installer (Inno Setup) and portable version (ZIP).
 
 [0.1.0]: https://github.com/vecttrz/RustTime/releases/tag/v0.1.0

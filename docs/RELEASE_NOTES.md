@@ -23,7 +23,7 @@ To uninstall, use *Add or remove programs* or run `unins000.exe` from the instal
 - Battery information: **cycles**, **current charge**, and **health**.
 - Horizontal, centered interface with dynamic height and a non-maximizable window.
 - **Automatic language:** Spanish when Windows is set to Spanish; English otherwise.
-- Application icon, development credits, and data refresh every 5 minutes.
+- Application icon, credits (vecttrz · 2026), and data refresh every 5 minutes.
 
 ## Release artifacts
 
@@ -46,4 +46,4 @@ Windows 10 or 11. To read disk S.M.A.R.T. hours, run the application as administ
 
 ---
 
-Development: **vecttrz** · 2026 · MIT License.
+**vecttrz** · 2026 · MIT License.

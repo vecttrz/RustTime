@@ -72,7 +72,7 @@ It does not require an internet connection, does not send data, and only writes 
 - **Dynamic height:** the window grows or shrinks according to the content.
 - Custom icon embedded in the executable and the window.
 - Automatic language: **Spanish** / **English**.
-- Data refresh on startup, on demand (**Refresh**), and every 5 minutes.
+- Data refresh on startup and automatically every 5 minutes.
 
 ---
 
@@ -176,6 +176,6 @@ Get-FileHash .\RustTime-v0.1.0-portable.zip -Algorithm SHA256
 
 ## 10. Credits and license
 
-Development: **vecttrz** · 2026.
+**vecttrz** · 2026.
 
 RustTime is distributed under the **MIT** license. See the `LICENSE` file included in the repository and in the installation.

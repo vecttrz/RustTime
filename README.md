@@ -67,8 +67,8 @@ Get-FileHash .\RustTime-v0.1.0-setup.exe -Algorithm SHA256
 - The **height adjusts automatically to the content** (for example, it grows when the countdown appears or more disks are detected).
 - **Automatic language:** if Windows is set to Spanish the interface is shown in Spanish; any other language shows English.
 - The icon from `design/Icon.ico` is embedded in the executable and is also used as the window icon.
-- System data refreshes on startup, when **Refresh** is clicked, and automatically every 5 minutes.
-- Development credits are visible at the bottom of the window.
+- System data refreshes on startup and automatically every 5 minutes.
+- Credits at the bottom of the window: **vecttrz** · 2026.
 
 ## Installation
 
@@ -138,7 +138,7 @@ release/      Generated artifacts (not versioned)
 
 ## Credits
 
-Development: **vecttrz** · 2026
+**vecttrz** · 2026
 
 ## License
 

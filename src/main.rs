@@ -312,13 +312,8 @@ fn centered_row(ui: &mut egui::Ui, width: f32, add_contents: impl FnOnce(&mut eg
     );
 }
 
-fn system_heading(ui: &mut egui::Ui, title: &str, app: &mut RustTimeApp, t: Texts) {
-    centered_row(ui, 190.0, |ui| {
-        ui.heading(title);
-        if ui.small_button(t.refresh).clicked() {
-            app.refresh_system();
-        }
-    });
+fn system_heading(ui: &mut egui::Ui, title: &str) {
+    ui.heading(title);
 }
 
 fn computer_section(ui: &mut egui::Ui, info: &SystemInfo, t: Texts) {
@@ -338,8 +333,6 @@ fn computer_section(ui: &mut egui::Ui, info: &SystemInfo, t: Texts) {
     if let Some(date) = &info.baseboard_date {
         ui.label(format!("{}{}", t.baseboard_date_prefix, date));
     }
-    ui.add_space(2.0);
-    ui.label(RichText::new(t.manufacturing_note).small().weak());
 }
 
 fn disk_section(
@@ -600,6 +593,9 @@ impl eframe::App for RustTimeApp {
                             }
                                 });
                             });
+
+                            ui.add_space(6.0);
+                            ui.label(RichText::new(t.manufacturing_note).small().weak());
                         },
                     );
 
@@ -612,7 +608,7 @@ impl eframe::App for RustTimeApp {
                         |ui| {
                             ui.group(|ui| {
                                 ui.vertical_centered(|ui| {
-                                    system_heading(ui, t.computer, self, t);
+                                    system_heading(ui, t.computer);
                                     computer_section(ui, &info, t);
                                 });
                             });
@@ -620,7 +616,7 @@ impl eframe::App for RustTimeApp {
                             ui.add_space(10.0);
                             ui.group(|ui| {
                                 ui.vertical_centered(|ui| {
-                                    system_heading(ui, t.hard_drives, self, t);
+                                    system_heading(ui, t.hard_drives);
                                     disk_section(ui, &info.disks, &info, self, t);
                                 });
                             });
