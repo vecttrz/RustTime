@@ -7,8 +7,6 @@
 
 A Windows desktop application written in Rust that lets you schedule a **shutdown** or **restart**, cancel or disable that schedule, and inspect **disk** and **battery** information.
 
-![RustTime window](docs/screenshot.png)
-
 📄 **Product description and installation instructions:** [docs/PRODUCT.md](docs/PRODUCT.md)
 
 > If the repository is hosted under a different user/name, update the download links in this section.
