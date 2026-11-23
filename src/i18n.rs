@@ -1,4 +1,4 @@
-/// Idioma de la interfaz, detectado a partir del idioma de Windows.
+/// Interface language, detected from the Windows language.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Lang {
     Spanish,
@@ -12,8 +12,8 @@ unsafe extern "system" {
 }
 
 impl Lang {
-    /// Usa el idioma de interfaz del usuario de Windows.
-    /// El identificador primario 0x0A corresponde a cualquier variante de español.
+    /// Uses the Windows user interface language.
+    /// Primary language identifier 0x0A corresponds to any Spanish variant.
     pub fn detect() -> Self {
         unsafe {
             let mut lang_id = GetUserDefaultUILanguage();
@@ -140,7 +140,7 @@ impl Lang {
     }
 }
 
-/// Textos visibles en la interfaz.
+/// Visible interface strings.
 #[derive(Clone, Copy)]
 pub struct Texts {
     pub app_subtitle: &'static str,

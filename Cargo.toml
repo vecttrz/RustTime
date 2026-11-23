@@ -2,7 +2,7 @@
 name = "rusttime"
 version = "0.1.0"
 edition = "2024"
-description = "Programa el apagado o reinicio de Windows con una interfaz gráfica"
+description = "Schedule Windows shutdown or restart with a graphical interface"
 
 [dependencies]
 eframe = "0.37.0"

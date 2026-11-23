@@ -1,23 +1,23 @@
 # Changelog
 
-Todos los cambios relevantes de RustTime se documentan aquí.
+All notable changes to RustTime are documented here.
 
-El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
-y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [0.1.0] - 2026-11-23
 
-### Añadido
-- Programación de apagado o reinicio de Windows por horas y minutos.
-- Cancelación de la operación pendiente y modo «deshabilitar apagado automático».
-- Cuenta atrás y estado de cada operación.
-- Información de discos físicos: tipo, capacidad y horas totales de encendido (S.M.A.R.T.).
-- Información de batería: ciclos consumidos, carga actual y salud.
-- Botón para relanzar la aplicación como administrador cuando S.M.A.R.T. no está disponible.
-- Interfaz horizontal de dos columnas, centrada, con alto dinámico y ventana no maximizable.
-- Detección automática de idioma: español si Windows está en español, inglés en cualquier otro caso.
-- Icono de aplicación incrustado en el ejecutable y en la ventana.
-- Créditos de desarrollo: vecttrz · 2026.
-- Artefactos de release: instalador (Inno Setup) y versión portable (ZIP).
+### Added
+- Schedule a Windows shutdown or restart by hours and minutes.
+- Cancel the pending operation and a "disable automatic shutdown" mode.
+- Countdown and status for every operation.
+- Physical disk information: type, capacity, and total power-on hours (S.M.A.R.T.).
+- Battery information: consumed cycles, current charge, and health.
+- Button to restart the application as administrator when S.M.A.R.T. is unavailable.
+- Two-column horizontal, centered interface with dynamic height and a non-maximizable window.
+- Automatic language detection: Spanish when Windows is set to Spanish, English otherwise.
+- Application icon embedded in the executable and the window.
+- Development credits: vecttrz · 2026.
+- Release artifacts: installer (Inno Setup) and portable version (ZIP).
 
 [0.1.0]: https://github.com/vecttrz/RustTime/releases/tag/v0.1.0

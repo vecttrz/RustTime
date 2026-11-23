@@ -18,9 +18,9 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 const AUTO_REFRESH: Duration = Duration::from_secs(300);
 const WINDOW_WIDTH: f32 = 920.0;
 
-/// `shutdown /t` de Windows admite como máximo 10 años (315360000 s).
+/// Windows `shutdown /t` supports a maximum of 10 years (315360000 s).
 const MAX_SECONDS: u64 = 315_360_000;
-const MAX_HOURS: u32 = 8_760; // 365 días
+const MAX_HOURS: u32 = 8_760; // 365 days
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Action {
@@ -199,7 +199,7 @@ impl RustTimeApp {
         }
     }
 
-    /// Cancela el apagado/reinicio pendiente (`shutdown /a`).
+    /// Cancels the pending shutdown/restart (`shutdown /a`).
     fn cancel_action(&mut self) {
         let t = self.lang.texts();
         match Command::new("shutdown")
@@ -303,7 +303,7 @@ fn clock(duration: Duration) -> String {
     )
 }
 
-/// Fila de ancho fijo que el layout centrado coloca en el centro de la ventana.
+/// Fixed-width row that the centered layout places in the middle of the window.
 fn centered_row(ui: &mut egui::Ui, width: f32, add_contents: impl FnOnce(&mut egui::Ui)) {
     ui.allocate_ui_with_layout(
         egui::vec2(width, 0.0),
@@ -486,7 +486,7 @@ impl eframe::App for RustTimeApp {
                 ui.horizontal_top(|ui| {
                     let right_width = (ui.available_width() - 390.0).max(260.0);
 
-                    // Columna izquierda: apagado y reinicio.
+                    // Left column: shutdown and restart.
                     ui.allocate_ui_with_layout(
                         egui::vec2(370.0, 0.0),
                         egui::Layout::top_down(egui::Align::Center),
@@ -584,7 +584,7 @@ impl eframe::App for RustTimeApp {
 
                     ui.add_space(16.0);
 
-                    // Columna derecha: información del equipo.
+                    // Right column: computer information.
                     ui.allocate_ui_with_layout(
                         egui::vec2(right_width, 0.0),
                         egui::Layout::top_down(egui::Align::Center),
@@ -622,7 +622,7 @@ impl eframe::App for RustTimeApp {
             content_height = Some(ui.cursor().top() - start_y);
         });
 
-        // Altura dinámica: la ventana se ajusta al contenido real (con un pequeño margen).
+        // Dynamic height: the window fits the actual content (with a small margin).
         if let Some(height) = content_height {
             let target = (height + 6.0).clamp(140.0, 900.0);
             if (ui.ctx().viewport_rect().height() - target).abs() > 1.0 {
@@ -635,10 +635,10 @@ impl eframe::App for RustTimeApp {
     }
 }
 
-/// Icono de la ventana, tomado de `design/Icon.png` e incrustado en el ejecutable.
+/// Window icon, taken from `design/Icon.png` and embedded in the executable.
 fn window_icon() -> Arc<egui::IconData> {
     let bytes = include_bytes!("../design/Icon.png");
-    let decoded = image::load_from_memory(bytes).expect("Icon.png no es una imagen válida");
+    let decoded = image::load_from_memory(bytes).expect("Icon.png is not a valid image");
     let icon = decoded
         .resize_exact(256, 256, image::imageops::FilterType::Lanczos3)
         .to_rgba8();

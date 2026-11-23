@@ -1,48 +1,48 @@
 # RustTime v0.1.0
 
-Primera versión pública de RustTime.
+First public release of RustTime.
 
-![Ventana principal de RustTime](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot.png)
+![RustTime main window](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot.png)
 
-📄 **Documento descriptivo del producto e instrucciones de instalación:** [docs/PRODUCTO.md](https://github.com/vecttrz/RustTime/blob/main/docs/PRODUCTO.md) — también disponible como archivo adjunto en esta release.
+📄 **Product description and installation instructions:** [docs/PRODUCT.md](https://github.com/vecttrz/RustTime/blob/main/docs/PRODUCT.md) — also attached to this release.
 
-## Instalación rápida
+## Quick installation
 
-**Instalador (recomendado):** descarga `RustTime-v0.1.0-setup.exe`, ejecútalo, acepta el control de cuentas de usuario si aparece y sigue el asistente. RustTime quedará en el menú Inicio y, si lo seleccionas, en el escritorio.
+**Installer (recommended):** download `RustTime-v0.1.0-setup.exe`, run it, accept the User Account Control prompt if it appears, and follow the wizard. RustTime will be available in the Start menu and, if selected, on the desktop.
 
-**Portable:** descarga `RustTime-v0.1.0-portable.zip`, extrae los archivos y ejecuta `RustTime.exe`. No necesita instalación.
+**Portable:** download `RustTime-v0.1.0-portable.zip`, extract the files, and run `RustTime.exe`. No installation is required.
 
-Para desinstalar, usa *Agregar o quitar programas* o ejecuta `unins000.exe` desde la carpeta de instalación.
+To uninstall, use *Add or remove programs* or run `unins000.exe` from the installation folder.
 
-## Novedades
+## What's new
 
-- Programación de **apagado** o **reinicio** de Windows por horas y minutos.
-- Cancelación de la operación pendiente y modo «deshabilitar apagado automático».
-- Información de discos: tipo, capacidad y **horas totales de encendido** (S.M.A.R.T., requiere administrador).
-- Información de batería: **ciclos**, **carga actual** y **salud**.
-- Interfaz horizontal, centrada, con alto dinámico y ventana no maximizable.
-- **Idioma automático:** español si Windows está en español; inglés en cualquier otro caso.
-- Icono de aplicación, créditos de desarrollo y verificación de datos cada 5 minutos.
+- Schedule a Windows **shutdown** or **restart** by hours and minutes.
+- Cancel the pending operation and a "disable automatic shutdown" mode.
+- Disk information: type, capacity, and **total power-on hours** (S.M.A.R.T., requires administrator).
+- Battery information: **cycles**, **current charge**, and **health**.
+- Horizontal, centered interface with dynamic height and a non-maximizable window.
+- **Automatic language:** Spanish when Windows is set to Spanish; English otherwise.
+- Application icon, development credits, and data refresh every 5 minutes.
 
-## Artefactos de esta release
+## Release artifacts
 
-| Archivo | Descripción |
+| File | Description |
 | --- | --- |
-| `RustTime-v0.1.0-setup.exe` | Instalador con Inno Setup (accesos directos y desinstalador). |
-| `RustTime-v0.1.0-portable.zip` | Versión portable: contiene `RustTime.exe`, README, LICENSE y CHANGELOG. |
-| `RustTime-v0.1.0-checksums.txt` | Hashes SHA-256 de los dos archivos anteriores. |
+| `RustTime-v0.1.0-setup.exe` | Inno Setup installer (shortcuts and uninstaller). |
+| `RustTime-v0.1.0-portable.zip` | Portable version: contains `RustTime.exe`, README, LICENSE, and CHANGELOG. |
+| `RustTime-v0.1.0-checksums.txt` | SHA-256 hashes of the two files above. |
 
-## Verificación
+## Verification
 
 ```powershell
 Get-FileHash .\RustTime-v0.1.0-setup.exe -Algorithm SHA256
 Get-FileHash .\RustTime-v0.1.0-portable.zip -Algorithm SHA256
 ```
 
-## Requisitos
+## Requirements
 
-Windows 10 u 11. Para leer las horas S.M.A.R.T. de los discos, ejecuta la aplicación como administrador.
+Windows 10 or 11. To read disk S.M.A.R.T. hours, run the application as administrator.
 
 ---
 
-Desarrollo: **vecttrz** · 2026 · Licencia MIT.
+Development: **vecttrz** · 2026 · MIT License.

@@ -1,142 +1,142 @@
 # RustTime
 
-[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 ![Rust](https://img.shields.io/badge/Rust-1.100%2B-orange)
 ![Windows](https://img.shields.io/badge/Windows-10%2F11-blue)
-![Versión](https://img.shields.io/badge/versión-0.1.0-green)
+![Version](https://img.shields.io/badge/version-0.1.0-green)
 
-Aplicación de escritorio para **Windows** escrita en Rust que permite programar el **apagado** o el **reinicio** del equipo, cancelar/deshabilitar esa programación y consultar información de **discos duros** y **batería**.
+A Windows desktop application written in Rust that lets you schedule a **shutdown** or **restart**, cancel or disable that schedule, and inspect **disk** and **battery** information.
 
-![Captura de RustTime](docs/screenshot.png)
+![RustTime window](docs/screenshot.png)
 
-📄 **Documento descriptivo del producto e instrucciones de instalación:** [docs/PRODUCTO.md](docs/PRODUCTO.md)
+📄 **Product description and installation instructions:** [docs/PRODUCT.md](docs/PRODUCT.md)
 
-> Si el repositorio se aloja bajo otro usuario/nombre, ajusta los enlaces de descarga de esta sección.
+> If the repository is hosted under a different user/name, update the download links in this section.
 
-## Descargas
+## Downloads
 
-Estos archivos se publican en la [página de releases](https://github.com/vecttrz/RustTime/releases):
+These files are published on the [releases page](https://github.com/vecttrz/RustTime/releases):
 
-| Artefacto | Archivo | Uso recomendado |
+| Artifact | File | Recommended use |
 | --- | --- | --- |
-| **Instalador** | `RustTime-v0.1.0-setup.exe` | Instalación en `{Program Files}\RustTime`, con acceso directo y desinstalador. |
-| **Portable** | `RustTime-v0.1.0-portable.zip` | Ejecutar sin instalar, por ejemplo desde una memoria USB. |
-| **Checksums** | `RustTime-v0.1.0-checksums.txt` | Verificación SHA-256 de los archivos anteriores. |
+| **Installer** | `RustTime-v0.1.0-setup.exe` | Installs to `{Program Files}\RustTime`, with a shortcut and uninstaller. |
+| **Portable** | `RustTime-v0.1.0-portable.zip` | Run without installing, for example from a USB drive. |
+| **Checksums** | `RustTime-v0.1.0-checksums.txt` | SHA-256 verification of the files above. |
 
-- [Descargar instalador](https://github.com/vecttrz/RustTime/releases/download/v0.1.0/RustTime-v0.1.0-setup.exe)
-- [Descargar versión portable](https://github.com/vecttrz/RustTime/releases/download/v0.1.0/RustTime-v0.1.0-portable.zip)
-- [Ver checksums](https://github.com/vecttrz/RustTime/releases/download/v0.1.0/RustTime-v0.1.0-checksums.txt)
+- [Download installer](https://github.com/vecttrz/RustTime/releases/download/v0.1.0/RustTime-v0.1.0-setup.exe)
+- [Download portable version](https://github.com/vecttrz/RustTime/releases/download/v0.1.0/RustTime-v0.1.0-portable.zip)
+- [View checksums](https://github.com/vecttrz/RustTime/releases/download/v0.1.0/RustTime-v0.1.0-checksums.txt)
 
-Para verificar un archivo en PowerShell:
+To verify a file in PowerShell:
 
 ```powershell
 Get-FileHash .\RustTime-v0.1.0-setup.exe -Algorithm SHA256
 ```
 
-## Funciones
+## Features
 
-### Apagado / Reinicio
+### Shutdown / Restart
 
-- Selección de **horas** y **minutos** (hasta 365 días).
-- Elección entre **apagar el equipo** o **reiniciarlo**.
-- Botón **Programar**: ejecuta `shutdown /s /t <segundos>` o `shutdown /r /t <segundos>`. La cuenta atrás de Windows sigue activa aunque se cierre RustTime.
-- Casilla **Deshabilitar apagado automático**: al marcarla se ejecuta `shutdown /a` y se impiden nuevas programaciones mientras esté activa.
-- Botón **Cancelar operación actual** para abortar la programación pendiente.
-- Visualización del tiempo restante y del resultado de cada operación.
+- Choose **hours** and **minutes** (up to 365 days).
+- Choose whether to **shut down** or **restart** the computer.
+- **Schedule** button: runs `shutdown /s /t <seconds>` or `shutdown /r /t <seconds>`. The Windows countdown keeps running even if RustTime is closed.
+- **Disable automatic shutdown** checkbox: runs `shutdown /a` and blocks new schedules while it is checked.
+- **Cancel current operation** button to abort the pending schedule.
+- Displays the remaining time and the result of each operation.
 
-### Discos duros
+### Hard drives
 
-- Muestra cada disco físico conectado con su tipo, capacidad y **horas totales de encendido** (S.M.A.R.T., `Power_On_Hours`).
-- La lectura de horas S.M.A.R.T. requiere ejecutar la aplicación **como administrador**; si no está disponible se ofrece un botón para reiniciarla con permisos elevados.
+- Shows every connected physical disk with its type, capacity, and **total power-on hours** (S.M.A.R.T., `Power_On_Hours`).
+- Reading S.M.A.R.T. hours requires running the application **as administrator**; if unavailable, a button is offered to restart it with elevated permissions.
 
-### Batería
+### Battery
 
-- **Ciclos consumidos** (informe XML de `powercfg /batteryreport`).
-- **Carga actual** (%) y **salud** de la batería (capacidad actual frente a la de diseño).
+- **Consumed cycles** (from the `powercfg /batteryreport` XML report).
+- **Current charge** (%) and battery **health** (current capacity versus design capacity).
 
-### Interfaz
+### Interface
 
-- Disposición **horizontal de dos columnas**: controles de apagado a la **izquierda** e información de discos y batería a la **derecha**.
-- Toda la información aparece **centrada** dentro de su columna y agrupada en secciones, con **márgenes laterales** en el formulario.
-- La ventana **no se puede maximizar ni redimensionar manualmente**.
-- El **alto se ajusta automáticamente al contenido** (por ejemplo, crece si aparece la cuenta atrás o más discos).
-- **Idioma automático:** si Windows está configurado en español la interfaz se muestra en español; con cualquier otro idioma se muestra en inglés.
-- El icono de `design/Icon.ico` está incrustado en el ejecutable y se usa también como icono de la ventana.
-- Los datos del sistema se actualizan al iniciar, al pulsar **Actualizar** y automáticamente cada 5 minutos.
-- Créditos de desarrollo visibles en la parte inferior de la ventana.
+- **Two-column horizontal layout**: shutdown controls on the **left** and disk/battery information on the **right**.
+- All information is **centered** within its column and grouped into sections, with **side margins** in the form.
+- The window **cannot be maximized or resized manually**.
+- The **height adjusts automatically to the content** (for example, it grows when the countdown appears or more disks are detected).
+- **Automatic language:** if Windows is set to Spanish the interface is shown in Spanish; any other language shows English.
+- The icon from `design/Icon.ico` is embedded in the executable and is also used as the window icon.
+- System data refreshes on startup, when **Refresh** is clicked, and automatically every 5 minutes.
+- Development credits are visible at the bottom of the window.
 
-## Instalación
+## Installation
 
-### Instalador
+### Installer
 
-1. Descarga `RustTime-v0.1.0-setup.exe`.
-2. Ejecútalo y sigue el asistente.
-3. Abre RustTime desde el menú Inicio o el acceso directo del escritorio.
+1. Download `RustTime-v0.1.0-setup.exe`.
+2. Run it and follow the wizard.
+3. Open RustTime from the Start menu or the desktop shortcut.
 
-El desinstalador se encuentra en la misma carpeta de instalación y en *Agregar o quitar programas*.
+The uninstaller is located in the installation folder and in *Add or remove programs*.
 
 ### Portable
 
-1. Descarga `RustTime-v0.1.0-portable.zip`.
-2. Extrae el archivo `RustTime.exe`.
-3. Ejecútalo directamente; no necesita instalación ni escribir en el registro.
+1. Download `RustTime-v0.1.0-portable.zip`.
+2. Extract `RustTime.exe`.
+3. Run it directly; no installation or registry writes are required.
 
-## Requisitos
+## Requirements
 
-- Windows 10 u 11.
-- Para las horas S.M.A.R.T. de los discos, permisos de administrador (la propia aplicación ofrece relanzarse elevada).
+- Windows 10 or 11.
+- Administrator permissions for disk S.M.A.R.T. hours (the application can restart itself elevated).
 
-## Compilación desde el código fuente
+## Building from source
 
-Necesitas [Rust](https://rustup.rs/) 1.100 o superior y, para generar el instalador, [Inno Setup 6](https://jrsoftware.org/isinfo.php).
+You need [Rust](https://rustup.rs/) 1.100 or newer and, to generate the installer, [Inno Setup 6](https://jrsoftware.org/isinfo.php).
 
 ```powershell
-# Compilar la aplicación
+# Build the application
 cargo build --release
 
-# Crear instalador y ZIP portable en la carpeta release\
+# Create the installer and portable ZIP in the release\ folder
 powershell -ExecutionPolicy Bypass -File .\scripts\build-release.ps1
 ```
 
-El ejecutable compilado se genera en `target\release\rusttime.exe` y los artefactos en `release\`.
+The compiled executable is written to `target\release\rusttime.exe` and the release artifacts to `release\`.
 
-## Uso rápido
+## Quick start
 
-1. Elige **horas** y **minutos**.
-2. Selecciona **Apagar** o **Reiniciar**.
-3. Pulsa **Programar**.
-4. Si necesitas abortar, pulsa **Cancelar operación actual** o marca **Deshabilitar apagado automático**.
+1. Choose **hours** and **minutes**.
+2. Select **Shut down** or **Restart**.
+3. Click **Schedule**.
+4. To abort, click **Cancel current operation** or check **Disable automatic shutdown**.
 
-También puedes cancelar desde una terminal:
+You can also cancel from a terminal:
 
 ```powershell
 shutdown /a
 ```
 
-## Solución de problemas
+## Troubleshooting
 
-- **«Horas no disponibles» en los discos:** Windows no expone los contadores S.M.A.R.T. sin elevación. Pulsa **Reiniciar como administrador** y acepta el aviso de UAC.
-- **El apagado no se cancela:** comprueba que no haya otra programación activa y ejecuta `shutdown /a` como administrador.
-- **Idioma incorrecto:** RustTime sigue el *idioma de interfaz de usuario* de Windows (`GetUserDefaultUILanguage`), no el formato regional.
+- **"Hours unavailable" for disks:** Windows does not expose S.M.A.R.T. counters without elevation. Click **Restart as administrator** and accept the UAC prompt.
+- **The shutdown is not cancelled:** check that no other schedule is active and run `shutdown /a` as administrator.
+- **Wrong language:** RustTime follows the Windows *user interface language* (`GetUserDefaultUILanguage`), not the regional format.
 
-## Estructura del repositorio
+## Repository structure
 
 ```text
-design/       Iconos del proyecto (Icon.ico, Icon.png, Icon.af)
-docs/         PRODUCTO.md, RELEASE_NOTES.md y captura de pantalla
-installer/    Script de Inno Setup para el instalador
-scripts/      Script para construir los artefactos de release
-src/          Código fuente Rust (main.rs, sysinfo.rs, i18n.rs)
-build.rs      Incrusta Icon.ico como recurso del ejecutable
-release/      Artefactos generados (no versionados)
+design/       Project icons (Icon.ico, Icon.png, Icon.af)
+docs/         PRODUCT.md, RELEASE_NOTES.md, and screenshot
+installer/    Inno Setup script for the installer
+scripts/      Script that builds the release artifacts
+src/          Rust source code (main.rs, sysinfo.rs, i18n.rs)
+build.rs      Embeds Icon.ico as an executable resource
+release/      Generated artifacts (not versioned)
 ```
 
-## Créditos
+## Credits
 
-Desarrollo: **vecttrz** · 2026
+Development: **vecttrz** · 2026
 
-## Licencia
+## License
 
-Distribuido bajo la licencia [MIT](LICENSE).
+Distributed under the [MIT](LICENSE) license.
 
-> **Nota:** no ejecutes la aplicación con un tiempo muy corto si no quieres que el equipo se apague o reinicie.
+> **Note:** do not run the application with a very short delay if you do not want the computer to shut down or restart.
