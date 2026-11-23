@@ -38,6 +38,8 @@ Copy-Item (Join-Path $root 'README.md') $stagingDir
 Copy-Item (Join-Path $root 'LICENSE') $stagingDir
 Copy-Item (Join-Path $root 'CHANGELOG.md') $stagingDir
 Copy-Item (Join-Path $root 'docs\PRODUCT.md') $stagingDir
+New-Item -ItemType Directory -Force -Path (Join-Path $stagingDir 'docs') | Out-Null
+Copy-Item (Join-Path $root 'docs\screenshot-en.png') (Join-Path $stagingDir 'docs')
 
 Remove-Item $zipFile -Force -ErrorAction SilentlyContinue
 Compress-Archive -Path (Join-Path $stagingDir '*') -DestinationPath $zipFile -CompressionLevel Optimal

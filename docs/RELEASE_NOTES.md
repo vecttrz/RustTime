@@ -2,7 +2,7 @@
 
 First public release of RustTime.
 
-![RustTime main window](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot.png)
+![RustTime main window in English](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot-en.png)
 
 📄 **Product description and installation instructions:** [docs/PRODUCT.md](https://github.com/vecttrz/RustTime/blob/main/docs/PRODUCT.md) — also attached to this release.
 
