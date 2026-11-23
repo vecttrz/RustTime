@@ -634,12 +634,6 @@ impl eframe::App for RustTimeApp {
 
                 ui.vertical_centered(|ui| {
                     ui.add_space(12.0);
-                    ui.label(
-                        RichText::new(t.footer)
-                        .small()
-                        .weak(),
-                    );
-                    ui.add_space(4.0);
                     ui.label(RichText::new(t.credits).small().weak());
                     ui.add_space(6.0);
                 });
