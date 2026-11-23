@@ -79,6 +79,7 @@ It does not require an internet connection, does not send data, and only writes 
 ## 4. Requirements
 
 - Windows 10 or 11.
+- [Microsoft Visual C++ 2015 Redistributable Update 3](https://www.microsoft.com/es-es/download/details.aspx?id=53840) (x64 or x86, matching your Windows architecture).
 - Administrator permissions for S.M.A.R.T. hours (the application offers to restart elevated).
 - To build from source: Rust 1.100+ and Inno Setup 6 (only for generating the installer).
 

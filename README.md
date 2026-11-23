@@ -89,6 +89,7 @@ The uninstaller is located in the installation folder and in *Add or remove prog
 ## Requirements
 
 - Windows 10 or 11.
+- [Microsoft Visual C++ 2015 Redistributable Update 3](https://www.microsoft.com/es-es/download/details.aspx?id=53840) (x64 or x86, matching your Windows architecture).
 - Administrator permissions for disk S.M.A.R.T. hours (the application can restart itself elevated).
 
 ## Building from source

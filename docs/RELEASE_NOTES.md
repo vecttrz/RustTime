@@ -42,7 +42,7 @@ Get-FileHash .\RustTime-v0.1.0-portable.zip -Algorithm SHA256
 
 ## Requirements
 
-Windows 10 or 11. To read disk S.M.A.R.T. hours, run the application as administrator.
+Windows 10 or 11 and [Microsoft Visual C++ 2015 Redistributable Update 3](https://www.microsoft.com/es-es/download/details.aspx?id=53840) (x64 or x86, matching your Windows architecture). To read disk S.M.A.R.T. hours, run the application as administrator.
 
 ---
 
