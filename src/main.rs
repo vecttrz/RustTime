@@ -595,7 +595,7 @@ impl eframe::App for RustTimeApp {
                             });
 
                             ui.add_space(6.0);
-                            ui.label(RichText::new(t.manufacturing_note).small().weak());
+                            ui.label(RichText::new(t.shutdown_note).small().weak());
                         },
                     );
 
