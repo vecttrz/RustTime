@@ -121,7 +121,7 @@ shutdown /a
 
 ```text
 design/       Project icons (Icon.ico, Icon.png, Icon.af)
-docs/         PRODUCT.md, RELEASE_NOTES.md, and screenshot
+docs/         PRODUCT.md and RELEASE_NOTES.md
 installer/    Inno Setup script for the installer
 scripts/      Script that builds the release artifacts
 src/          Rust source code (main.rs, sysinfo.rs, i18n.rs)
