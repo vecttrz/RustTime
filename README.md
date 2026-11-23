@@ -7,7 +7,7 @@
 
 A Windows desktop application written in Rust that lets you schedule a **shutdown** or **restart**, cancel or disable that schedule, and inspect **disk** and **battery** information.
 
-![RustTime in English](docs/screenshot-en.png)
+![RustTime in English](docs/Screenshot.png)
 
 📄 **Product description and installation instructions:** [docs/PRODUCT.md](docs/PRODUCT.md)
 
@@ -123,7 +123,7 @@ shutdown /a
 
 ```text
 design/       Project icons (Icon.ico, Icon.png, Icon.af)
-docs/         PRODUCT.md, RELEASE_NOTES.md, and the English screenshot
+docs/         PRODUCT.md, RELEASE_NOTES.md, and Screenshot.png
 installer/    Inno Setup script for the installer
 scripts/      Script that builds the release artifacts
 src/          Rust source code (main.rs, sysinfo.rs, i18n.rs)

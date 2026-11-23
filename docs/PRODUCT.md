@@ -14,7 +14,7 @@ RustTime is a lightweight Windows desktop application that lets you **schedule a
 
 The information is presented in a horizontal, centered window with automatic height. The interface language follows the system: Spanish when Windows is set to Spanish, English otherwise.
 
-![RustTime main window in English](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot-en.png)
+![RustTime main window in English](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/Screenshot.png)
 
 ---
 
