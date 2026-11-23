@@ -1,0 +1,197 @@
+/// Idioma de la interfaz, detectado a partir del idioma de Windows.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Lang {
+    Spanish,
+    English,
+}
+
+#[link(name = "kernel32")]
+unsafe extern "system" {
+    fn GetUserDefaultUILanguage() -> u16;
+    fn GetSystemDefaultUILanguage() -> u16;
+}
+
+impl Lang {
+    /// Usa el idioma de interfaz del usuario de Windows.
+    /// El identificador primario 0x0A corresponde a cualquier variante de español.
+    pub fn detect() -> Self {
+        unsafe {
+            let mut lang_id = GetUserDefaultUILanguage();
+            if lang_id == 0 {
+                lang_id = GetSystemDefaultUILanguage();
+            }
+            if lang_id & 0x00FF == 0x000A {
+                Self::Spanish
+            } else {
+                Self::English
+            }
+        }
+    }
+
+    pub fn texts(self) -> Texts {
+        match self {
+            Self::Spanish => Texts {
+                app_subtitle: "Apagado, reinicio e información del equipo",
+                shutdown_restart: "Apagado / Reinicio",
+                hours_label: "Horas:",
+                minutes_label: "Minutos:",
+                shutdown_option: "Apagar el equipo",
+                restart_option: "Reiniciar el equipo",
+                duration_prefix: "Duración seleccionada: ",
+                disable_auto: "Deshabilitar apagado automático",
+                auto_enabled_again: "Apagado automático habilitado de nuevo.",
+                schedule_button: "Programar",
+                cancel_button: "Cancelar operación actual",
+                pending_mid: " pendiente · restante: ",
+                hard_drives: "Discos duros",
+                battery: "Batería",
+                refresh: "Actualizar",
+                power_hours_caption: "Horas de encendido (S.M.A.R.T.)",
+                querying: "Consultando los discos y la batería…",
+                no_disks: "No se detectaron discos.",
+                power_hours_suffix: " h de encendido",
+                hours_unavailable: "Horas no disponibles",
+                disks_error_prefix: "Discos: ",
+                admin_hint: "Para leer las horas S.M.A.R.T. ejecuta RustTime como administrador.",
+                restart_admin: "Reiniciar como administrador",
+                no_battery: "No se detectó ninguna batería.",
+                cycles_suffix: " ciclos consumidos",
+                cycles_unavailable: "Ciclos no disponibles",
+                charge_prefix: "Carga actual: ",
+                health_prefix: "Salud: ",
+                battery_error_prefix: "Batería: ",
+                footer: "La programación usa 'shutdown' de Windows y sigue activa al cerrar RustTime. La información del equipo se actualiza cada 5 minutos.",
+                credits: "Desarrollo: vecttrz · 2026",
+                initial_status: "Elige el tiempo y pulsa «Programar».",
+                auto_disabled_error: "El apagado automático está deshabilitado. Actívalo para programar.",
+                need_one_minute: "Introduce al menos 1 minuto.",
+                max_ten_years: "El tiempo máximo es de 10 años.",
+                scheduled_mid: "programado correctamente dentro de",
+                windows_failed_prefix: "Windows no pudo programar la operación: ",
+                shutdown_failed_prefix: "No se pudo ejecutar «shutdown»: ",
+                cancel_ok: "Operación cancelada: el apagado automático está deshabilitado.",
+                cancel_failed_prefix: "No había nada pendiente o no se pudo cancelar: ",
+                cancel_exec_failed_prefix: "No se pudo ejecutar «shutdown /a»: ",
+                exe_not_found_prefix: "No se pudo localizar el ejecutable: ",
+                elevate_failed: "No se pudo iniciar como administrador (¿se canceló el aviso de UAC?).",
+                exit_code_prefix: "código de salida ",
+                shutdown_label: "Apagado",
+                restart_label: "Reinicio",
+                disk_default: "Disco",
+                battery_default: "Batería",
+                powershell_failed: "No se pudo ejecutar PowerShell.",
+                parse_failed: "No se pudo interpretar la respuesta de Windows.",
+                thousands_separator: '.',
+            },
+            Self::English => Texts {
+                app_subtitle: "Shutdown, restart and computer information",
+                shutdown_restart: "Shutdown / Restart",
+                hours_label: "Hours:",
+                minutes_label: "Minutes:",
+                shutdown_option: "Shut down the computer",
+                restart_option: "Restart the computer",
+                duration_prefix: "Selected duration: ",
+                disable_auto: "Disable automatic shutdown",
+                auto_enabled_again: "Automatic shutdown enabled again.",
+                schedule_button: "Schedule",
+                cancel_button: "Cancel current operation",
+                pending_mid: " pending · remaining: ",
+                hard_drives: "Hard drives",
+                battery: "Battery",
+                refresh: "Refresh",
+                power_hours_caption: "Power-on hours (S.M.A.R.T.)",
+                querying: "Reading disks and battery…",
+                no_disks: "No disks detected.",
+                power_hours_suffix: " power-on hours",
+                hours_unavailable: "Hours unavailable",
+                disks_error_prefix: "Disks: ",
+                admin_hint: "To read S.M.A.R.T. hours, run RustTime as administrator.",
+                restart_admin: "Restart as administrator",
+                no_battery: "No battery detected.",
+                cycles_suffix: " charge cycles",
+                cycles_unavailable: "Cycles unavailable",
+                charge_prefix: "Current charge: ",
+                health_prefix: "Health: ",
+                battery_error_prefix: "Battery: ",
+                footer: "Scheduling uses Windows 'shutdown' and remains active after closing RustTime. Computer information refreshes every 5 minutes.",
+                credits: "Development: vecttrz · 2026",
+                initial_status: "Choose a time and click \"Schedule\".",
+                auto_disabled_error: "Automatic shutdown is disabled. Enable it to schedule.",
+                need_one_minute: "Enter at least 1 minute.",
+                max_ten_years: "The maximum time is 10 years.",
+                scheduled_mid: "scheduled successfully in",
+                windows_failed_prefix: "Windows could not schedule the operation: ",
+                shutdown_failed_prefix: "Could not run \"shutdown\": ",
+                cancel_ok: "Operation cancelled: automatic shutdown is disabled.",
+                cancel_failed_prefix: "Nothing was pending or it could not be cancelled: ",
+                cancel_exec_failed_prefix: "Could not run \"shutdown /a\": ",
+                exe_not_found_prefix: "Could not find the executable: ",
+                elevate_failed: "Could not start as administrator (was the UAC prompt cancelled?).",
+                exit_code_prefix: "exit code ",
+                shutdown_label: "Shutdown",
+                restart_label: "Restart",
+                disk_default: "Disk",
+                battery_default: "Battery",
+                powershell_failed: "Could not run PowerShell.",
+                parse_failed: "Could not parse the Windows response.",
+                thousands_separator: ',',
+            },
+        }
+    }
+}
+
+/// Textos visibles en la interfaz.
+#[derive(Clone, Copy)]
+pub struct Texts {
+    pub app_subtitle: &'static str,
+    pub shutdown_restart: &'static str,
+    pub hours_label: &'static str,
+    pub minutes_label: &'static str,
+    pub shutdown_option: &'static str,
+    pub restart_option: &'static str,
+    pub duration_prefix: &'static str,
+    pub disable_auto: &'static str,
+    pub auto_enabled_again: &'static str,
+    pub schedule_button: &'static str,
+    pub cancel_button: &'static str,
+    pub pending_mid: &'static str,
+    pub hard_drives: &'static str,
+    pub battery: &'static str,
+    pub refresh: &'static str,
+    pub power_hours_caption: &'static str,
+    pub querying: &'static str,
+    pub no_disks: &'static str,
+    pub power_hours_suffix: &'static str,
+    pub hours_unavailable: &'static str,
+    pub disks_error_prefix: &'static str,
+    pub admin_hint: &'static str,
+    pub restart_admin: &'static str,
+    pub no_battery: &'static str,
+    pub cycles_suffix: &'static str,
+    pub cycles_unavailable: &'static str,
+    pub charge_prefix: &'static str,
+    pub health_prefix: &'static str,
+    pub battery_error_prefix: &'static str,
+    pub footer: &'static str,
+    pub credits: &'static str,
+    pub initial_status: &'static str,
+    pub auto_disabled_error: &'static str,
+    pub need_one_minute: &'static str,
+    pub max_ten_years: &'static str,
+    pub scheduled_mid: &'static str,
+    pub windows_failed_prefix: &'static str,
+    pub shutdown_failed_prefix: &'static str,
+    pub cancel_ok: &'static str,
+    pub cancel_failed_prefix: &'static str,
+    pub cancel_exec_failed_prefix: &'static str,
+    pub exe_not_found_prefix: &'static str,
+    pub elevate_failed: &'static str,
+    pub exit_code_prefix: &'static str,
+    pub shutdown_label: &'static str,
+    pub restart_label: &'static str,
+    pub disk_default: &'static str,
+    pub battery_default: &'static str,
+    pub powershell_failed: &'static str,
+    pub parse_failed: &'static str,
+    pub thousands_separator: char,
+}
