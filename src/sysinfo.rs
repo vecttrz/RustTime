@@ -10,12 +10,35 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 const COLLECT_SCRIPT: &str = r#"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'SilentlyContinue'
-$result = [ordered]@{ elevated = $false; disks = @(); batteries = @(); diskError = $null; batteryError = $null }
+$result = [ordered]@{ elevated = $false; manufacturer = $null; model = $null; biosDate = $null; baseBoardDate = $null; disks = @(); batteries = @(); diskError = $null; batteryError = $null }
 
 try {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($identity)
     $result.elevated = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+} catch { }
+
+try {
+    $system = Get-CimInstance Win32_ComputerSystem -ErrorAction Stop
+    $result.manufacturer = [string]$system.Manufacturer
+    $result.model = [string]$system.Model
+} catch { }
+
+try {
+    $bios = Get-CimInstance Win32_BIOS -ErrorAction Stop
+    if ($null -ne $bios.ReleaseDate) {
+        $date = [datetime]$bios.ReleaseDate
+        if ($date.Year -gt 1980) { $result.biosDate = $date.ToString('yyyy-MM-dd') }
+    }
+} catch { }
+
+try {
+    $biosKey = Get-ItemProperty 'HKLM:\HARDWARE\DESCRIPTION\System\BIOS' -ErrorAction Stop
+    $rawDate = [string]$biosKey.BaseBoardReleaseDate
+    if (-not [string]::IsNullOrWhiteSpace($rawDate)) {
+        try { $result.baseBoardDate = ([datetime]$rawDate).ToString('yyyy-MM-dd') }
+        catch { $result.baseBoardDate = $rawDate }
+    }
 } catch { }
 
 try {
@@ -97,6 +120,10 @@ pub struct BatteryInfo {
 pub struct SystemInfo {
     pub disks: Vec<DiskInfo>,
     pub batteries: Vec<BatteryInfo>,
+    pub manufacturer: Option<String>,
+    pub model: Option<String>,
+    pub bios_date: Option<String>,
+    pub baseboard_date: Option<String>,
     pub elevated: bool,
     pub disk_error: Option<String>,
     pub battery_error: Option<String>,
@@ -144,6 +171,10 @@ pub fn collect(t: Texts) -> SystemInfo {
     };
 
     info.elevated = json.get("elevated").and_then(Value::as_bool).unwrap_or(false);
+    info.manufacturer = string_field(json.get("manufacturer"));
+    info.model = string_field(json.get("model"));
+    info.bios_date = string_field(json.get("biosDate"));
+    info.baseboard_date = string_field(json.get("baseBoardDate"));
     info.disk_error = string_field(json.get("diskError"));
     info.battery_error = string_field(json.get("batteryError"));
 

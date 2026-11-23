@@ -10,7 +10,7 @@
 
 ## 1. Executive summary
 
-RustTime is a lightweight Windows desktop application that lets you **schedule a computer shutdown or restart** by hours and minutes, cancel that schedule, and inspect technical hardware information: **total power-on hours for each disk** and **battery status** (cycles, charge, and health).
+RustTime is a lightweight Windows desktop application that lets you **schedule a computer shutdown or restart** by hours and minutes, cancel that schedule, and inspect technical hardware information: **computer identification and BIOS/motherboard dates**, **total power-on hours for each disk**, and **battery status** (cycles, charge, and health).
 
 The information is presented in a horizontal, centered window with automatic height. The interface language follows the system: Spanish when Windows is set to Spanish, English otherwise.
 
@@ -44,7 +44,13 @@ It does not require an internet connection, does not send data, and only writes 
 | Disable automatic shutdown | Cancels any schedule and blocks new schedules while checked. |
 | Status and countdown | Shows the result of each action and the remaining time. |
 
-### 3.2 Disk information
+### 3.2 Computer information
+
+- Shows the **manufacturer** and **model** of the computer.
+- Shows the **BIOS date** (`Win32_BIOS.ReleaseDate`) and the **motherboard date** if the manufacturer exposes it.
+- Windows does not expose a reliable standard "manufacturing date", so the BIOS/motherboard date is shown as the closest available reference.
+
+### 3.3 Disk information
 
 - Lists every connected **physical disk**.
 - Shows name, type (SSD/HDD), capacity, and **total power-on hours** (S.M.A.R.T., `Power_On_Hours`).
@@ -52,13 +58,13 @@ It does not require an internet connection, does not send data, and only writes 
 
 > Reading S.M.A.R.T. data requires administrator privileges on most Windows computers.
 
-### 3.3 Battery information
+### 3.4 Battery information
 
 - **Consumed cycles** (obtained from the `powercfg /batteryreport` XML report).
 - **Current charge** as a percentage.
 - Battery **health**: current capacity versus design capacity, in mWh.
 
-### 3.4 Interface and user experience
+### 3.5 Interface and user experience
 
 - **Two-column layout**: controls on the left, computer information on the right.
 - Centered and grouped content with side margins.

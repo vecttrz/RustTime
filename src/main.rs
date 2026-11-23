@@ -321,6 +321,27 @@ fn system_heading(ui: &mut egui::Ui, title: &str, app: &mut RustTimeApp, t: Text
     });
 }
 
+fn computer_section(ui: &mut egui::Ui, info: &SystemInfo, t: Texts) {
+    if let Some(manufacturer) = &info.manufacturer {
+        if !manufacturer.is_empty() {
+            ui.label(format!("{}{}", t.manufacturer_prefix, manufacturer));
+        }
+    }
+    if let Some(model) = &info.model {
+        if !model.is_empty() {
+            ui.label(format!("{}{}", t.model_prefix, model));
+        }
+    }
+    if let Some(date) = &info.bios_date {
+        ui.label(format!("{}{}", t.bios_date_prefix, date));
+    }
+    if let Some(date) = &info.baseboard_date {
+        ui.label(format!("{}{}", t.baseboard_date_prefix, date));
+    }
+    ui.add_space(2.0);
+    ui.label(RichText::new(t.manufacturing_note).small().weak());
+}
+
 fn disk_section(
     ui: &mut egui::Ui,
     disks: &[DiskInfo],
@@ -591,10 +612,18 @@ impl eframe::App for RustTimeApp {
                         |ui| {
                             ui.group(|ui| {
                                 ui.vertical_centered(|ui| {
+                                    system_heading(ui, t.computer, self, t);
+                                    computer_section(ui, &info, t);
+                                });
+                            });
+
+                            ui.add_space(10.0);
+                            ui.group(|ui| {
+                                ui.vertical_centered(|ui| {
                                     system_heading(ui, t.hard_drives, self, t);
-                            disk_section(ui, &info.disks, &info, self, t);
-                        });
-                    });
+                                    disk_section(ui, &info.disks, &info, self, t);
+                                });
+                            });
 
                             ui.add_space(10.0);
                             ui.group(|ui| {

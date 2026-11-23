@@ -5,7 +5,7 @@
 ![Windows](https://img.shields.io/badge/Windows-10%2F11-blue)
 ![Version](https://img.shields.io/badge/version-0.1.0-green)
 
-A Windows desktop application written in Rust that lets you schedule a **shutdown** or **restart**, cancel or disable that schedule, and inspect **disk** and **battery** information.
+A Windows desktop application written in Rust that lets you schedule a **shutdown** or **restart**, cancel or disable that schedule, and inspect **computer**, **disk**, and **battery** information.
 
 ![RustTime in English](docs/Screenshot.png)
 
@@ -44,6 +44,11 @@ Get-FileHash .\RustTime-v0.1.0-setup.exe -Algorithm SHA256
 - **Cancel current operation** button to abort the pending schedule.
 - Displays the remaining time and the result of each operation.
 
+### Computer information
+
+- Manufacturer, model, **BIOS date**, and motherboard date (when exposed by the manufacturer).
+- Windows does not provide a reliable standard "manufacturing date", so the BIOS/motherboard date is shown instead.
+
 ### Hard drives
 
 - Shows every connected physical disk with its type, capacity, and **total power-on hours** (S.M.A.R.T., `Power_On_Hours`).
@@ -56,7 +61,7 @@ Get-FileHash .\RustTime-v0.1.0-setup.exe -Algorithm SHA256
 
 ### Interface
 
-- **Two-column horizontal layout**: shutdown controls on the **left** and disk/battery information on the **right**.
+- **Two-column horizontal layout**: shutdown controls on the **left** and computer/disk/battery information on the **right**.
 - All information is **centered** within its column and grouped into sections, with **side margins** in the form.
 - The window **cannot be maximized or resized manually**.
 - The **height adjusts automatically to the content** (for example, it grows when the countdown appears or more disks are detected).
