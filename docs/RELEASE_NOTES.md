@@ -2,6 +2,18 @@
 
 Primera versión pública de RustTime.
 
+![Ventana principal de RustTime](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot.png)
+
+📄 **Documento descriptivo del producto e instrucciones de instalación:** [docs/PRODUCTO.md](https://github.com/vecttrz/RustTime/blob/main/docs/PRODUCTO.md) — también disponible como archivo adjunto en esta release.
+
+## Instalación rápida
+
+**Instalador (recomendado):** descarga `RustTime-v0.1.0-setup.exe`, ejecútalo, acepta el control de cuentas de usuario si aparece y sigue el asistente. RustTime quedará en el menú Inicio y, si lo seleccionas, en el escritorio.
+
+**Portable:** descarga `RustTime-v0.1.0-portable.zip`, extrae los archivos y ejecuta `RustTime.exe`. No necesita instalación.
+
+Para desinstalar, usa *Agregar o quitar programas* o ejecuta `unins000.exe` desde la carpeta de instalación.
+
 ## Novedades
 
 - Programación de **apagado** o **reinicio** de Windows por horas y minutos.

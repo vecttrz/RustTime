@@ -14,7 +14,7 @@ RustTime es una aplicación de escritorio ligera para Windows que permite **prog
 
 La información se presenta en una ventana horizontal, centrada y con altura automática. El idioma de la interfaz se adapta al sistema: español si Windows está configurado en español, inglés en cualquier otro caso.
 
-![Ventana principal de RustTime](screenshot.png)
+![Ventana principal de RustTime](https://raw.githubusercontent.com/vecttrz/RustTime/main/docs/screenshot.png)
 
 ---
 
