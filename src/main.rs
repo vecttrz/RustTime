@@ -376,7 +376,7 @@ fn disk_section(
                             ui.label(
                                 RichText::new(t.hours_unavailable)
                                     .small()
-                                    .color(Color32::from_rgb(255, 190, 110)),
+                                    .color(Color32::from_rgb(150, 85, 20)),
                             );
                         }
                     }
@@ -587,7 +587,7 @@ impl eframe::App for RustTimeApp {
                                             clock(remaining)
                                         ))
                                         .strong()
-                                        .color(Color32::from_rgb(255, 200, 90)),
+                                        .color(Color32::from_rgb(150, 85, 20)),
                                     );
                                 }
                             }
