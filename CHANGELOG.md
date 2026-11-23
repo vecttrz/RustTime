@@ -12,7 +12,7 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Cancel the pending operation and a "disable automatic shutdown" mode.
 - Countdown and status for every operation.
 - Computer information: manufacturer, model, and BIOS/motherboard date.
-- Physical disk information: type, capacity, and total power-on hours (S.M.A.R.T.).
+- Physical disk information: type, capacity, total power-on hours and power-cycle (start) count (S.M.A.R.T.).
 - Battery information: consumed cycles, current charge, and health.
 - Button to restart the application as administrator when S.M.A.R.T. is unavailable.
 - Two-column horizontal, centered interface with dynamic height and a non-maximizable window.

@@ -51,7 +51,7 @@ Get-FileHash .\RustTime-v0.1.0-setup.exe -Algorithm SHA256
 
 ### Hard drives
 
-- Shows every connected physical disk with its type, capacity, and **total power-on hours** (S.M.A.R.T., `Power_On_Hours`).
+- Shows every connected physical disk with its type, capacity, **total power-on hours** and **power-cycle (start) count** (S.M.A.R.T., `Power_On_Hours` / `StartStopCycleCount`).
 - Reading S.M.A.R.T. hours requires running the application **as administrator**; if unavailable, a button is offered to restart it with elevated permissions.
 
 ### Battery
@@ -121,7 +121,7 @@ shutdown /a
 
 ## Troubleshooting
 
-- **"Hours unavailable" for disks:** Windows restricts S.M.A.R.T. counters to elevated processes. Click **Restart as administrator** and accept the UAC prompt. RustTime tries several sources (`Get-PhysicalDisk`/`Get-Disk` reliability counters and raw ATA S.M.A.R.T. attribute 09). Some NVMe drives, USB enclosures and RAID controllers do not expose the power-on-hours value at all; in that case no Windows tool can read it and only a vendor utility (for example CrystalDiskInfo or smartmontools) may show it.
+- **"Hours unavailable" or "Starts unavailable" for disks:** Windows restricts S.M.A.R.T. counters to elevated processes. Click **Restart as administrator** and accept the UAC prompt. RustTime reads power-on hours and power-cycle (start) count from `Get-PhysicalDisk`/`Get-Disk` reliability counters, falling back to raw ATA S.M.A.R.T. attributes 09 and 0C. Some NVMe drives, USB enclosures and RAID controllers do not expose these values at all; in that case only a vendor utility (for example CrystalDiskInfo or smartmontools) may show them.
 - **"No battery detected" on a laptop:** RustTime uses the Windows battery report; if your laptop has a battery but it is not detected, check that the battery driver is installed correctly.
 - **The shutdown is not cancelled:** check that no other schedule is active and run `shutdown /a` as administrator.
 - **Wrong language:** RustTime follows the Windows *user interface language* (`GetUserDefaultUILanguage`), not the regional format.

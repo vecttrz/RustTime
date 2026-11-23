@@ -41,21 +41,31 @@ try {
     }
 } catch { }
 
-# Fallback: raw ATA SMART attribute 0x09 (Power-On Hours), available only when elevated.
+# Fallback: raw ATA SMART attributes 0x09 (Power-On Hours) and 0x0C (Power Cycle Count).
 $smartHours = @{}
+$smartStarts = @{}
 try {
     foreach ($className in @('MSStorageDriver_ATAPISmartData', 'MSStorageDriver_FailurePredictData')) {
         foreach ($item in @(Get-CimInstance -Namespace root\wmi -ClassName $className -ErrorAction Stop)) {
             $bytes = @($item.VendorSpecific)
             if ($bytes.Count -lt 14) { continue }
             $name = [string]$item.InstanceName
-            for ($i = 2; $i -le $bytes.Count - 12; $i += 12) {
-                if ([int]$bytes[$i] -eq 9) {
-                    $value = [int]$bytes[$i + 5] + ([int]$bytes[$i + 6] * 256)
-                    if ($value -gt 0 -and -not $smartHours.ContainsKey($name)) {
-                        $smartHours[$name] = [uint64]$value
-                    }
-                    break
+            # Each attribute is a 12-byte record starting at offset 1.
+            # ID is at +1; the 6-byte big-endian raw value is at +6..+11.
+            for ($i = 1; $i + 12 -le $bytes.Count; $i += 12) {
+                $id = [int]$bytes[$i + 1]
+                if ($id -eq 0) { continue }
+                $raw = [uint64]0
+                for ($j = 6; $j -le 11; $j++) { $raw = ($raw * 256) + [uint64]$bytes[$i + $j] }
+                if ($id -eq 9) {
+                    # Power-on hours: low 4 bytes of the raw value.
+                    $value = [uint64]0
+                    for ($j = 8; $j -le 11; $j++) { $value = ($value * 256) + [uint64]$bytes[$i + $j] }
+                    if ($value -gt 0 -and -not $smartHours.ContainsKey($name)) { $smartHours[$name] = $value }
+                }
+                if ($id -eq 12) {
+                    # Power-cycle count: full raw value.
+                    if ($raw -gt 0 -and -not $smartStarts.ContainsKey($name)) { $smartStarts[$name] = $raw }
                 }
             }
         }
@@ -65,13 +75,15 @@ try {
 try {
     foreach ($disk in @(Get-PhysicalDisk -ErrorAction Stop)) {
         $hours = $null
+        $starts = $null
         try {
             $counter = $disk | Get-StorageReliabilityCounter -ErrorAction Stop
             if ($null -ne $counter.PowerOnHours) { $hours = [uint64]$counter.PowerOnHours }
+            if ($null -ne $counter.StartStopCycleCount) { $starts = [uint64]$counter.StartStopCycleCount }
         } catch { }
 
         # Second path: Get-Disk can expose counters when Get-PhysicalDisk does not.
-        if ($null -eq $hours) {
+        if ($null -eq $hours -or $null -eq $starts) {
             try {
                 $serial = [string]$disk.SerialNumber
                 $diskObj = Get-Disk -ErrorAction Stop | Where-Object {
@@ -79,19 +91,21 @@ try {
                 } | Select-Object -First 1
                 if ($null -ne $diskObj) {
                     $counter2 = $diskObj | Get-StorageReliabilityCounter -ErrorAction Stop
-                    if ($null -ne $counter2.PowerOnHours) { $hours = [uint64]$counter2.PowerOnHours }
+                    if ($null -eq $hours -and $null -ne $counter2.PowerOnHours) { $hours = [uint64]$counter2.PowerOnHours }
+                    if ($null -eq $starts -and $null -ne $counter2.StartStopCycleCount) { $starts = [uint64]$counter2.StartStopCycleCount }
                 }
             } catch { }
         }
 
         # Third path: match the raw SMART entry by serial or model name.
-        if ($null -eq $hours -and $smartHours.Count -gt 0) {
+        if (($null -eq $hours -and $smartHours.Count -gt 0) -or ($null -eq $starts -and $smartStarts.Count -gt 0)) {
             $serial = ([string]$disk.SerialNumber).Trim()
             $model = [string]$disk.FriendlyName
-            foreach ($key in $smartHours.Keys) {
+            foreach ($key in @($smartHours.Keys) + @($smartStarts.Keys)) {
                 if (($serial -and $key.Contains($serial)) -or ($model -and $key.Contains($model))) {
-                    $hours = $smartHours[$key]
-                    break
+                    if ($null -eq $hours -and $smartHours.ContainsKey($key)) { $hours = $smartHours[$key] }
+                    if ($null -eq $starts -and $smartStarts.ContainsKey($key)) { $starts = $smartStarts[$key] }
+                    if ($null -ne $hours -and $null -ne $starts) { break }
                 }
             }
         }
@@ -101,6 +115,7 @@ try {
             media = [string]$disk.MediaType
             bytes = [uint64]$disk.Size
             hours = $hours
+            starts = $starts
         }
     }
 } catch {
@@ -157,6 +172,7 @@ pub struct DiskInfo {
     pub media: String,
     pub size_gb: f64,
     pub power_on_hours: Option<u64>,
+    pub start_count: Option<u64>,
 }
 
 #[derive(Clone, Default)]
@@ -242,6 +258,7 @@ pub fn collect(t: Texts) -> SystemInfo {
                 .map(|bytes| bytes as f64 / 1024.0 / 1024.0 / 1024.0)
                 .unwrap_or(0.0),
             power_on_hours: value.get("hours").and_then(Value::as_u64),
+            start_count: value.get("starts").and_then(Value::as_u64),
         });
     }
 

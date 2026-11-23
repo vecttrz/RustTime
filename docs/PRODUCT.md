@@ -10,7 +10,7 @@
 
 ## 1. Executive summary
 
-RustTime is a lightweight Windows desktop application that lets you **schedule a computer shutdown or restart** by hours and minutes, cancel that schedule, and inspect technical hardware information: **computer identification and BIOS/motherboard dates**, **total power-on hours for each disk**, and **battery status** (cycles, charge, and health).
+RustTime is a lightweight Windows desktop application that lets you **schedule a computer shutdown or restart** by hours and minutes, cancel that schedule, and inspect technical hardware information: **computer identification and BIOS/motherboard dates**, **total power-on hours and start count for each disk**, and **battery status** (cycles, charge, and health).
 
 The information is presented in a horizontal, centered window with automatic height. The interface language follows the system: Spanish when Windows is set to Spanish, English otherwise.
 
@@ -53,7 +53,7 @@ It does not require an internet connection, does not send data, and only writes 
 ### 3.3 Disk information
 
 - Lists every connected **physical disk**.
-- Shows name, type (SSD/HDD), capacity, and **total power-on hours** (S.M.A.R.T., `Power_On_Hours`).
+- Shows name, type (SSD/HDD), capacity, **total power-on hours** and **power-cycle (start) count** (S.M.A.R.T., `Power_On_Hours` / `StartStopCycleCount`).
 - If Windows does not expose that data without elevated permissions, a notice and a button to **restart as administrator** are shown.
 
 > Reading S.M.A.R.T. data requires administrator privileges on most Windows computers.
@@ -157,7 +157,7 @@ shutdown /a
 
 | Situation | Solution |
 | --- | --- |
-| "Hours unavailable" for disks | Windows restricts S.M.A.R.T. counters to elevated processes: click **Restart as administrator** and accept UAC. RustTime tries `Get-PhysicalDisk`/`Get-Disk` reliability counters and raw ATA S.M.A.R.T. attribute 09. Some NVMe drives, USB enclosures and RAID controllers never expose power-on hours; in that case a vendor utility (CrystalDiskInfo, smartmontools) is needed. |
+| "Hours unavailable" / "Starts unavailable" for disks | Windows restricts S.M.A.R.T. counters to elevated processes: click **Restart as administrator** and accept UAC. RustTime reads power-on hours and power-cycle (start) count from `Get-PhysicalDisk`/`Get-Disk` reliability counters, falling back to raw ATA S.M.A.R.T. attributes 09 and 0C. Some NVMe drives, USB enclosures and RAID controllers never expose these values; in that case a vendor utility (CrystalDiskInfo, smartmontools) is needed. |
 | "No battery detected" on a laptop | RustTime follows Windows battery detection; check that the battery driver is installed correctly. |
 | The shutdown is not cancelled | Run `shutdown /a` as administrator. |
 | The interface appears in the wrong language | RustTime follows the Windows UI language, not the regional format. |

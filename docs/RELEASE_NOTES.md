@@ -19,7 +19,7 @@ To uninstall, use *Add or remove programs* or run `unins000.exe` from the instal
 - Schedule a Windows **shutdown** or **restart** by hours and minutes.
 - Cancel the pending operation and a "disable automatic shutdown" mode.
 - Computer information: manufacturer, model, and BIOS/motherboard date.
-- Disk information: type, capacity, and **total power-on hours** (S.M.A.R.T., requires administrator).
+- Disk information: type, capacity, **total power-on hours** and **power-cycle (start) count** (S.M.A.R.T., requires administrator).
 - Battery information: **cycles**, **current charge**, and **health**.
 - Horizontal, centered interface with dynamic height and a non-maximizable window.
 - **Automatic language:** Spanish when Windows is set to Spanish; English otherwise.

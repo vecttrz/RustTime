@@ -380,6 +380,18 @@ fn disk_section(
                             );
                         }
                     }
+                    match disk.start_count {
+                        Some(starts) => {
+                            ui.label(format!(
+                                "{}{}",
+                                format_number(starts, t),
+                                t.starts_suffix
+                            ));
+                        }
+                        None => {
+                            ui.label(RichText::new(t.starts_unavailable).small().weak());
+                        }
+                    }
                 });
             });
         }
@@ -394,7 +406,11 @@ fn disk_section(
         );
     }
 
-    if disks.iter().any(|disk| disk.power_on_hours.is_none()) && !info.elevated {
+    if disks
+        .iter()
+        .any(|disk| disk.power_on_hours.is_none() || disk.start_count.is_none())
+        && !info.elevated
+    {
         ui.add_space(6.0);
         ui.label(RichText::new(t.admin_hint).small().weak());
         if ui.small_button(t.restart_admin).clicked() {
