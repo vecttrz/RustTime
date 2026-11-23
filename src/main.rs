@@ -404,7 +404,7 @@ fn disk_section(
 }
 
 fn battery_section(ui: &mut egui::Ui, batteries: &[BatteryInfo], info: &SystemInfo, t: Texts) {
-    if batteries.is_empty() {
+    if !info.has_battery || batteries.is_empty() {
         ui.label(t.no_battery);
     } else {
         for battery in batteries {
@@ -449,13 +449,15 @@ fn battery_section(ui: &mut egui::Ui, batteries: &[BatteryInfo], info: &SystemIn
         }
     }
 
-    if let Some(error) = &info.battery_error {
-        ui.add_space(4.0);
-        ui.label(
-            RichText::new(format!("{}{}", t.battery_error_prefix, error))
-                .small()
-                .weak(),
-        );
+    if info.has_battery {
+        if let Some(error) = &info.battery_error {
+            ui.add_space(4.0);
+            ui.label(
+                RichText::new(format!("{}{}", t.battery_error_prefix, error))
+                    .small()
+                    .weak(),
+            );
+        }
     }
 }
 

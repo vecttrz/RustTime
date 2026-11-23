@@ -157,7 +157,8 @@ shutdown /a
 
 | Situation | Solution |
 | --- | --- |
-| "Hours unavailable" for disks | Click **Restart as administrator** and accept UAC. |
+| "Hours unavailable" for disks | Windows restricts S.M.A.R.T. counters to elevated processes: click **Restart as administrator** and accept UAC. RustTime tries `Get-PhysicalDisk`/`Get-Disk` reliability counters and raw ATA S.M.A.R.T. attribute 09. Some NVMe drives, USB enclosures and RAID controllers never expose power-on hours; in that case a vendor utility (CrystalDiskInfo, smartmontools) is needed. |
+| "No battery detected" on a laptop | RustTime follows Windows battery detection; check that the battery driver is installed correctly. |
 | The shutdown is not cancelled | Run `shutdown /a` as administrator. |
 | The interface appears in the wrong language | RustTime follows the Windows UI language, not the regional format. |
 | The installer does not open | Verify the file's SHA-256 hash against the one included in the release. |

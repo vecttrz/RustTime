@@ -10,7 +10,7 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 const COLLECT_SCRIPT: &str = r#"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = 'SilentlyContinue'
-$result = [ordered]@{ elevated = $false; manufacturer = $null; model = $null; biosDate = $null; baseBoardDate = $null; disks = @(); batteries = @(); diskError = $null; batteryError = $null }
+$result = [ordered]@{ elevated = $false; manufacturer = $null; model = $null; biosDate = $null; baseBoardDate = $null; hasBattery = $false; disks = @(); batteries = @(); diskError = $null; batteryError = $null }
 
 try {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -41,6 +41,27 @@ try {
     }
 } catch { }
 
+# Fallback: raw ATA SMART attribute 0x09 (Power-On Hours), available only when elevated.
+$smartHours = @{}
+try {
+    foreach ($className in @('MSStorageDriver_ATAPISmartData', 'MSStorageDriver_FailurePredictData')) {
+        foreach ($item in @(Get-CimInstance -Namespace root\wmi -ClassName $className -ErrorAction Stop)) {
+            $bytes = @($item.VendorSpecific)
+            if ($bytes.Count -lt 14) { continue }
+            $name = [string]$item.InstanceName
+            for ($i = 2; $i -le $bytes.Count - 12; $i += 12) {
+                if ([int]$bytes[$i] -eq 9) {
+                    $value = [int]$bytes[$i + 5] + ([int]$bytes[$i + 6] * 256)
+                    if ($value -gt 0 -and -not $smartHours.ContainsKey($name)) {
+                        $smartHours[$name] = [uint64]$value
+                    }
+                    break
+                }
+            }
+        }
+    }
+} catch { }
+
 try {
     foreach ($disk in @(Get-PhysicalDisk -ErrorAction Stop)) {
         $hours = $null
@@ -48,6 +69,33 @@ try {
             $counter = $disk | Get-StorageReliabilityCounter -ErrorAction Stop
             if ($null -ne $counter.PowerOnHours) { $hours = [uint64]$counter.PowerOnHours }
         } catch { }
+
+        # Second path: Get-Disk can expose counters when Get-PhysicalDisk does not.
+        if ($null -eq $hours) {
+            try {
+                $serial = [string]$disk.SerialNumber
+                $diskObj = Get-Disk -ErrorAction Stop | Where-Object {
+                    $_.SerialNumber -and $serial -and $_.SerialNumber.Trim() -eq $serial.Trim()
+                } | Select-Object -First 1
+                if ($null -ne $diskObj) {
+                    $counter2 = $diskObj | Get-StorageReliabilityCounter -ErrorAction Stop
+                    if ($null -ne $counter2.PowerOnHours) { $hours = [uint64]$counter2.PowerOnHours }
+                }
+            } catch { }
+        }
+
+        # Third path: match the raw SMART entry by serial or model name.
+        if ($null -eq $hours -and $smartHours.Count -gt 0) {
+            $serial = ([string]$disk.SerialNumber).Trim()
+            $model = [string]$disk.FriendlyName
+            foreach ($key in $smartHours.Keys) {
+                if (($serial -and $key.Contains($serial)) -or ($model -and $key.Contains($model))) {
+                    $hours = $smartHours[$key]
+                    break
+                }
+            }
+        }
+
         $result.disks += [pscustomobject]@{
             name  = [string]$disk.FriendlyName
             media = [string]$disk.MediaType
@@ -61,39 +109,43 @@ try {
 
 try {
     $charges = @{}
-    foreach ($battery in @(Get-CimInstance Win32_Battery)) {
+    $batteryDevices = @(Get-CimInstance Win32_Battery -ErrorAction Stop)
+    $result.hasBattery = $batteryDevices.Count -gt 0
+    foreach ($battery in $batteryDevices) {
         $charges[[string]$battery.Name] = [uint32]$battery.EstimatedChargeRemaining
     }
 
-    $tempFile = Join-Path $env:TEMP ("rusttime_batt_" + [guid]::NewGuid().ToString('N') + '.xml')
-    & powercfg /batteryreport /output $tempFile /xml | Out-Null
-    $xml = [xml](Get-Content -Path $tempFile -Raw -ErrorAction Stop)
+    if ($result.hasBattery) {
+        $tempFile = Join-Path $env:TEMP ("rusttime_batt_" + [guid]::NewGuid().ToString('N') + '.xml')
+        & powercfg /batteryreport /output $tempFile /xml | Out-Null
+        $xml = [xml](Get-Content -Path $tempFile -Raw -ErrorAction Stop)
 
-    foreach ($battery in @($xml.BatteryReport.Batteries.Battery)) {
-        $name = [string]$battery.Id
-        $result.batteries += [pscustomobject]@{
-            name   = $name
-            cycles = if ($battery.CycleCount) { [uint32]$battery.CycleCount } else { $null }
-            design = if ($battery.DesignCapacity) { [uint64]$battery.DesignCapacity } else { $null }
-            full   = if ($battery.FullChargeCapacity) { [uint64]$battery.FullChargeCapacity } else { $null }
-            charge = $charges[$name]
-        }
-    }
-
-    if ($result.batteries.Count -eq 0) {
-        foreach ($battery in @(Get-CimInstance Win32_Battery)) {
+        foreach ($battery in @($xml.BatteryReport.Batteries.Battery)) {
+            $name = [string]$battery.Id
             $result.batteries += [pscustomobject]@{
-                name   = [string]$battery.Name
-                cycles = $null
-                design = $null
-                full   = $null
-                charge = [uint32]$battery.EstimatedChargeRemaining
+                name   = $name
+                cycles = if ($battery.CycleCount) { [uint32]$battery.CycleCount } else { $null }
+                design = if ($battery.DesignCapacity) { [uint64]$battery.DesignCapacity } else { $null }
+                full   = if ($battery.FullChargeCapacity) { [uint64]$battery.FullChargeCapacity } else { $null }
+                charge = $charges[$name]
             }
         }
+
+        if ($result.batteries.Count -eq 0) {
+            foreach ($battery in $batteryDevices) {
+                $result.batteries += [pscustomobject]@{
+                    name   = [string]$battery.Name
+                    cycles = $null
+                    design = $null
+                    full   = $null
+                    charge = [uint32]$battery.EstimatedChargeRemaining
+                }
+            }
+        }
+        Remove-Item $tempFile -ErrorAction SilentlyContinue
     }
-    Remove-Item $tempFile -ErrorAction SilentlyContinue
 } catch {
-    $result.batteryError = $_.Exception.Message
+    if ($result.hasBattery) { $result.batteryError = $_.Exception.Message }
 }
 
 $result | ConvertTo-Json -Depth 5 -Compress
@@ -124,6 +176,7 @@ pub struct SystemInfo {
     pub model: Option<String>,
     pub bios_date: Option<String>,
     pub baseboard_date: Option<String>,
+    pub has_battery: bool,
     pub elevated: bool,
     pub disk_error: Option<String>,
     pub battery_error: Option<String>,
@@ -171,6 +224,7 @@ pub fn collect(t: Texts) -> SystemInfo {
     };
 
     info.elevated = json.get("elevated").and_then(Value::as_bool).unwrap_or(false);
+    info.has_battery = json.get("hasBattery").and_then(Value::as_bool).unwrap_or(true);
     info.manufacturer = string_field(json.get("manufacturer"));
     info.model = string_field(json.get("model"));
     info.bios_date = string_field(json.get("biosDate"));
