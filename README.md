@@ -9,6 +9,8 @@ Aplicación de escritorio para **Windows** escrita en Rust que permite programar
 
 ![Captura de RustTime](docs/screenshot.png)
 
+📄 **Documento descriptivo del producto e instrucciones de instalación:** [docs/PRODUCTO.md](docs/PRODUCTO.md)
+
 > Si el repositorio se aloja bajo otro usuario/nombre, ajusta los enlaces de descarga de esta sección.
 
 ## Descargas
@@ -121,7 +123,7 @@ shutdown /a
 
 ```text
 design/       Iconos del proyecto (Icon.ico, Icon.png, Icon.af)
-docs/         Capturas y documentación
+docs/         PRODUCTO.md, RELEASE_NOTES.md y captura de pantalla
 installer/    Script de Inno Setup para el instalador
 scripts/      Script para construir los artefactos de release
 src/          Código fuente Rust (main.rs, sysinfo.rs, i18n.rs)
